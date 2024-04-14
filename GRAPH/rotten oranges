@@ -1,0 +1,86 @@
+asked 
+ no of days neeeded to infect all thr 1 adjacent fruits to the infected one
+  0 represent empty space 
+  1 reopresents fresh fruit
+  2 infected fruit
+
+
+
+
+
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        
+            if( grid.empty()) return 0;
+        // bfs traversal
+
+        int tot=0 ,  r=grid.size(),  c=grid[0].size(), cnt=0, days=0;
+        queue<pair<int , int>> rotten;
+
+        for( int i=0;i< r ; ++i)
+        {
+            for ( int j=0;j< c ; ++j)
+            {
+
+                if( grid[i][j] !=0) tot++;   /// store combined number of 2 and 1  lastly checked that the number got infected by count variable in the emptying side 
+                if(grid[i][j] ==2) rotten.push({i,j});
+            }
+
+        }
+
+
+        // empltying the queue by taking one by one each element 
+
+        int dx[4] = { 0 , 0 , 1,-1};
+        int dy[4] = { 1 , -1 , 0 , 0};
+
+
+
+        while(! rotten.empty())
+        {
+            
+            int k= rotten.size();
+
+            cnt+= k;  // cureent number of 2 when they will be empty and fresh one will come some dimisished or mor evalue and new value of k will,be assigned to variable k
+
+            //this is compared wtih tot at the last  total consisit sim of 2 and 1 present in groid
+            // if tot === cnt then all paiten will be infected
+
+            // emptying the current queee and filling the new elements in it 
+            // thats why  i used variable k to store the current size of 2 my rotten queue is holding
+            // 
+
+            while( k--)
+            {
+                int temp_curr_x= rotten.front().first, temp_curr_y=rotten.front().second;
+
+                rotten.pop(); // removed the forst pair from the queue after temporarly storing the current loction
+                // checking the adjacent location
+
+                for( int i=0;i<4 ; ++i)
+                {
+                    int nx= temp_curr_x  + dx[i] , ny = temp_curr_y + dy[i];
+
+                    if( nx <0 || ny <0 || nx>=r || ny>=c || grid[nx][ny] !=1 )  continue;  // if anyone matches  continuethe peocess
+
+                    // otherwise nake a change a pudh a new element into the rottrn queue
+
+                    grid[nx][ny] = 2 ;
+                    rotten.push({nx,ny});
+                }
+
+                // time to add + into the days as the negibour will get infected in 1 day
+
+                
+
+            }
+             if(!rotten.empty()) days++;
+              /// if the queue is not empty means i have some new locastions to be checked adjacent to it.
+
+
+        }
+
+        return  tot==cnt ? days : -1;
+    }
+};
