@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        // concept of longest suubstring of certain is solved by unordered map or by brute force recurssion
+        // recurssion when length is in 1000
+        // using unordered_set is best here to use
+    unordered_set<char> us;
+    int mxSize=0;
+
+    for( int i=0,j=0 ; j<s.size() ; )
+    {
+        if(us.find(s[j]) != us.end())
+        {
+                  //mxSize= max(mxSize , j-i); no need to count here
+            i++; // " dvdf" 
+            j =i;// just shift the pointer or window to repeating character 
+                  //j++; now it will start like things are strating from zero index . 
+            us.clear();
+           
+        }
+        else{
+
+            us.insert(s[j]);
+            mxSize= max(mxSize, (int)us.size());
+            j++;
+        }
+    }
+
+    return mxSize;
+
+    }
+
+
+};
+
+
+// i have to typecast in line 24 becz the value returned from us.size() is of the type size_t .
